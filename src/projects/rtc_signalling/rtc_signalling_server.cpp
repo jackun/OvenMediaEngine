@@ -101,11 +101,17 @@ bool RtcSignallingServer::InitializeWebSocketServer()
 				return false;
 			}
 
+			ov::String app_name, stream_name;
+			// FIXME Split() returns zero length string before first separator, skip it
+			std::vector<ov::String> app_name_tokens(tokens.begin() + 1, tokens.end() - 1);
+			app_name = ov::String::Join(app_name_tokens, "/");
+			stream_name = tokens[tokens.size() - 1];
+
 			auto info = std::make_shared<RtcSignallingInfo>(
 				// application_name
-				tokens[1],
+				app_name,
 				// stream_name
-				tokens[2],
+				stream_name,
 
 				// id
 				P2P_INVALID_PEER_ID,

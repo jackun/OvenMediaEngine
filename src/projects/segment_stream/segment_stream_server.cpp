@@ -199,7 +199,9 @@ bool SegmentStreamServer::RequestUrlParsing(const ov::String &request_url,
         return false;
     }
 
-    app_name = tokens[tokens.size() - 3];
+    // FIXME Split() returns zero length string before first separator, skip it
+    std::vector<ov::String> app_name_tokens(tokens.begin() + 1, tokens.end() - 2);
+    app_name = ov::String::Join(app_name_tokens, "/");
     stream_name = tokens[tokens.size() - 2];
     file_name = tokens[tokens.size() - 1];
 
